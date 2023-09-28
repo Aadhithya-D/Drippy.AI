@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "981705216545",
+    "project_id": "grid-5-software",
+    "storage_bucket": "grid-5-software.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981705216545:android:9e004429bf43726eb90960",
+        "android_client_info": {
+          "package_name": "com.example.fashion_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981705216545-m8v1pldgmg16ja6kk1edcp1553kuhotd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvMb_dYSuTyf1YwPBlBZIaPU-EhDc9fD0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981705216545-m8v1pldgmg16ja6kk1edcp1553kuhotd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
