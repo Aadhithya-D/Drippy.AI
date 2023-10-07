@@ -8,14 +8,13 @@ import 'package:fashion_ai/services/chat_service.dart';
 import 'package:fashion_ai/services/scrapper_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  HomeScreen({Key? key});
 
-  final chatController = TextEditingController();
+  final TextEditingController chatController = TextEditingController();
   final AiController aiController = Get.put(AiController());
 
   @override
@@ -32,30 +31,25 @@ class HomeScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
-        backgroundColor: Theme
-            .of(context)
-            .colorScheme
-            .background,
+        backgroundColor: Theme.of(context).colorScheme.background,
         appBar: AppBar(
-          backgroundColor: Theme
-              .of(context)
-              .colorScheme
-              .primary,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           elevation: 0,
           title: Text(
             "Drippy.AI",
-            style: GoogleFonts.ibmPlexMono(color: Theme.of(context).colorScheme.tertiary, fontWeight: FontWeight.w600)
+            style: GoogleFonts.ibmPlexMono(
+              color: Theme.of(context).colorScheme.tertiary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           actions: [
             IconButton(
-                onPressed: signUserOut,
-                icon: Icon(
-                  Icons.logout,
-                  color: Theme
-                      .of(context)
-                      .colorScheme
-                      .tertiary,
-                ))
+              onPressed: signUserOut,
+              icon: Icon(
+                Icons.logout,
+                color: Theme.of(context).colorScheme.tertiary,
+              ),
+            ),
           ],
           centerTitle: true,
         ),
@@ -63,10 +57,10 @@ class HomeScreen extends StatelessWidget {
           child: Obx(() {
             return Column(
               children: [
-                const SizedBox(height: 5,),
+                SizedBox(height: 5),
                 Expanded(child: _buildChatMessageList()),
                 _buildPlaceHolder(),
-                _buildChatMessageInput(context)
+                _buildChatMessageInput(context),
               ],
             );
           }),
@@ -76,11 +70,10 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildChatMessageList() {
-    // return SingleChildScrollView(child: Column());
     return Obx(() {
       if (aiController.humanHistory.isEmpty) {
         return Image.asset(
-          "lib/images/undraw_chat_re_re1u.png",
+          "assets/images/undraw_chat_re_re1u.png",
           width: 250,
         );
       } else {
@@ -92,7 +85,6 @@ class HomeScreen extends StatelessWidget {
         );
       }
     });
-    //
   }
 
   Widget _buildPlaceHolder() {
@@ -100,104 +92,93 @@ class HomeScreen extends StatelessWidget {
       return Column(
         children: [
           BubbleSpecialThree(
-            text: aiController
-                .humanHistory[aiController.humanHistory.length - 1],
-            color: const Color(0xFF1B97F3),
+            text: aiController.humanHistory.last,
+            color: Color(0xFF1B97F3),
             tail: true,
-            textStyle: const TextStyle(
-                color: Colors.white, fontSize: 16),
+            textStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+            ),
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          SizedBox(height: 5),
           BubbleNormalImage(
             id: 'id001',
             image: Image.asset(
-              "lib/images/animation_lljc1k50_small.gif",
+              "assets/images/animation_lljc1k50_small.gif",
               height: 30,
             ),
-            color: const Color(0xFFE8E8EE),
+            color: Color(0xFFE8E8EE),
             tail: true,
             isSender: false,
           ),
-          const SizedBox(
-            height: 5,
-          ),
+          SizedBox(height: 5),
         ],
       );
-    }
-    else {
+    } else {
       return Container();
     }
   }
 
   Widget _buildChatMessage(int index) {
-    // print(aiController.chatHistory[index].aiMessage);
     return Column(
       children: [
         BubbleSpecialThree(
           text: aiController.chatHistory[index].humanMessage,
-          color: const Color(0xFF1B97F3),
+          color: Color(0xFF1B97F3),
           tail: true,
-          textStyle: const TextStyle(color: Colors.white, fontSize: 16),
+          textStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+          ),
         ),
-        // Text("Human Message: ${}"),
-        const SizedBox(
-          height: 5,
-        ),
+        SizedBox(height: 5),
         BubbleSpecialThree(
           text: aiController.chatHistory[index].aiMessage,
-          color: const Color(0xFFE8E8EE),
+          color: Color(0xFFE8E8EE),
           tail: true,
           isSender: false,
         ),
-        const SizedBox(
-          height: 5,
-        ),
-        // Text("AI Message: ${}"),
+        SizedBox(height: 5),
       ],
     );
   }
 
-  // message input
   Widget _buildChatMessageInput(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 9.0),
       child: Row(
         children: [
           Expanded(
-              child: ChatTextField(
-                controller: chatController,
-                hintText: "Message",
-                icon: Icons.chat_bubble,
-                obscureText: false,
-                type: TextInputType.text,
-              )),
+            child: ChatTextField(
+              controller: chatController,
+              hintText: "Message",
+              icon: Icons.chat_bubble,
+              obscureText: false,
+              type: TextInputType.text,
+            ),
+          ),
           IconButton(
-              onPressed: () async {
-                var text = chatController.text;
-                if (text != "Search") {
-                  aiController.humanHistory.add(text);
-                  chatController.clear();
-                  aiController.chatHistory.add(await ChatService().chat(text));
-                }
-                else {
-                  aiController.humanHistory.add(text);
-                  chatController.clear();
-                  var temp = await ChatService().summary(
-                      aiController.chatHistory[aiController.chatHistory.length -
-                          1].aiMessage);
+            onPressed: () async {
+              var text = chatController.text;
+              if (text != "Search") {
+                aiController.humanHistory.add(text);
+                chatController.clear();
+                aiController.chatHistory.add(await ChatService().chat(text));
+              } else {
+                aiController.humanHistory.add(text);
+                chatController.clear();
+                var temp = await ChatService()
+                    .summary(aiController.chatHistory.last.aiMessage);
 
-                  var sum = temp.aiMessage;
-                  List<String> productArray = sum.replaceAll('[', '')
-                      .replaceAll(']', '').replaceAll("'", '')
-                      .split(',');
-                  aiController.itemList.addAll(productArray);
-                  ScrapperService().searchFlipkart();
-                  // Navigator.push(context, MaterialPageRoute(builder: (context)=>FlipKartPage()));
-                }
-              },
-              icon: const Icon(Icons.send))
+                var sum = temp.aiMessage;
+                List<String> productArray =
+                    sum.replaceAll('[', '').replaceAll(']', '').replaceAll("'", '').split(',');
+                aiController.itemList.addAll(productArray);
+                ScrapperService().searchFlipkart();
+              }
+            },
+            icon: Icon(Icons.send),
+          ),
         ],
       ),
     );
